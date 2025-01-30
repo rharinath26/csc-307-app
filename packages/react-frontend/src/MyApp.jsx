@@ -3,14 +3,48 @@ import React, { useState, useEffect } from "react";
 import Table from "./Table";
 import Form from "./Form";
 
+
 function MyApp() {
   const [characters, setCharacters] = useState([]);
   function removeOneCharacter(index) {
+    const characterToDelete = characters[index];
+  
+    return fetch(`http://localhost:8000/users/${characterToDelete.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to delete user");
+      }
+      setCharacters(prevCharacters => prevCharacters.filter((_, i) => i !== index));
+    })
+    .catch(error => console.log("Error deleting character:", error));
+  }
+  /*
+  function removeOneCharacter(index) {
+    const characterToDelete = characters[index];
+    const promise = fetch(`http://localhost:8000/users/${characterToDelete.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then((response) => {
+      if (response.status === 204) {
+        setCharacters(prevCharacters => prevCharacters.filter((_, i) => i !== index));
+      }
+    })
+    return promise;
+    */
+    /*
     const updated = characters.filter((character, i) => {
       return i !== index;
     });
     setCharacters(updated);
   }
+*/
   function fetchUsers() {
     const promise = fetch("http://localhost:8000/users");
     return promise;
@@ -25,7 +59,7 @@ function MyApp() {
       });
   }, []);
   function postUser(person) {
-    const promise = fetch("Http://localhost:8000/users", {
+    const promise = fetch("http://localhost:8000/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -33,13 +67,14 @@ function MyApp() {
       body: JSON.stringify(person)
     }).then((response) => {
       if (response.status === 201) {
-        return promise; //this works but requires a reload
+        return response.json();
       }
     });
+    return promise;
   }
   function updateList(person) {
     postUser(person)
-      .then(() => setCharacters([...characters, person]))
+      .then((user) => setCharacters([...characters, user]))
       .catch((error) => {
         console.log(error);
       });

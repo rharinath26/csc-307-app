@@ -103,10 +103,10 @@ app.get("/users/:id", (req, res) => {
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
   if (!userToAdd.id) {
-    userToAdd.id = 1000000*Math.random(0, 1); //generate id
+    userToAdd.id = (1000000*Math.random(0, 1)).toString(); //generate id
   }
   addUser(userToAdd); //return new object?
-  res.status(201).send("Entry added.");
+  res.status(201).send(userToAdd);
 });
 
 app.delete("/users/:id", (req, res) => {
