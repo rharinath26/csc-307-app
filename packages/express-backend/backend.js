@@ -105,7 +105,7 @@ app.post("/users", (req, res) => {
   if (!userToAdd.id) {
     userToAdd.id = (1000000*Math.random(0, 1)).toString(); //generate id
   }
-  addUser(userToAdd); //return new object?
+  addUser(userToAdd); //return new object
   res.status(201).send(userToAdd);
 });
 
