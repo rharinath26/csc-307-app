@@ -8,8 +8,7 @@ function MyApp() {
   const [characters, setCharacters] = useState([]);
   function removeOneCharacter(index) {
     const characterToDelete = characters[index];
-  
-    return fetch(`http://localhost:8000/users/${characterToDelete.id}`, {
+    return fetch(`http://localhost:8000/users/${characterToDelete._id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json"
@@ -20,31 +19,10 @@ function MyApp() {
         throw new Error("Failed to delete user");
       }
       setCharacters(prevCharacters => prevCharacters.filter((_, i) => i !== index));
+
     })
     .catch(error => console.log("Error deleting character:", error));
   }
-  /*
-  function removeOneCharacter(index) {
-    const characterToDelete = characters[index];
-    const promise = fetch(`http://localhost:8000/users/${characterToDelete.id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }).then((response) => {
-      if (response.status === 204) {
-        setCharacters(prevCharacters => prevCharacters.filter((_, i) => i !== index));
-      }
-    })
-    return promise;
-    */
-    /*
-    const updated = characters.filter((character, i) => {
-      return i !== index;
-    });
-    setCharacters(updated);
-  }
-*/
   function fetchUsers() {
     const promise = fetch("http://localhost:8000/users");
     return promise;
