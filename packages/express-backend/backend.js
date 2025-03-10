@@ -86,7 +86,7 @@ app.delete("/users/:_id", (req, res) => {
       res.status(404).send("Could not find ID of user to delete");
     }
     else {
-      res.json(user);
+      res.status(204).json(user);
     }
   })
   .catch((error) => res.status(500).send("Delete error"));
